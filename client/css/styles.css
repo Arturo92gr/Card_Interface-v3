@@ -1,0 +1,116 @@
+.palos {
+    width: 90%;
+    margin: 1rem auto;
+    display: flex;
+    gap: 1rem;
+}
+
+.baraja {
+    width: 90%;
+    height: 300px;
+    margin: 1rem auto;
+    border: 2px dashed #ccc;
+    position: relative;
+
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.baraja .card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    /* La propiedad 'left' se establece en Card.js */
+}
+
+.contenedor {
+    width: 300px;
+    height: 300px;
+    border: 2px dashed #ccc;
+    position: relative;
+}
+
+.card {
+    min-width: 100px;
+    height: 150px;
+    background-color: white;
+    border: 1px solid black;
+    margin: 10px;
+    text-align: center;
+    line-height: normal;
+    border-radius: 5px;
+    cursor: move;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.card .numero,
+.card .palo {
+    position: absolute;
+    font-size: 1.2rem;
+}
+
+.card .top-left {
+    top: 5px;
+    left: 5px;
+}
+
+.card .top-right {
+    top: 5px;
+    right: 5px;
+}
+
+.card .bottom-left {
+    bottom: 5px;
+    left: 5px;
+}
+
+.card .bottom-right {
+    bottom: 5px;
+    right: 5px;
+}
+
+.card[data-palo="corazones"] .palo,
+.card[data-palo="diamantes"] .palo,
+.contenedor[data-palo="corazones"],
+.contenedor[data-palo="diamantes"] {
+    color: red;
+}
+
+.card[data-palo="picas"] .palo,
+.card[data-palo="treboles"] .palo {
+    color: black;
+}
+
+.numero, .palo {
+    color: black;
+}
+
+.numero, .palo {
+    position: absolute;
+    font-size: 1.2rem;
+}
+
+.numero.top-left {
+    top: 5px;
+    left: 5px;
+}
+
+
+.numero.bottom-right {
+    bottom: 5px;
+    right: 5px;
+}
+
+.palo.bottom-left {
+    bottom: 5px;
+    left: 5px;
+}
+.palo.top-right {
+    top: 5px;
+    right: 5px;
+}
+
+.dragging {
+    opacity: 0.7;
+}
