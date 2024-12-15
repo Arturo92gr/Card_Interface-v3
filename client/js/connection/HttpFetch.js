@@ -1,17 +1,44 @@
-export class HttpFetch extends Http {
-    obtenerUI(route, callBackOnSuccess){
-        fetch(`${this.base_url}/${route}`).then(
-            (response) => {
-                response.json().then(
-                    (data) => {
-                        callBackOnSuccess(data);
-                    }
-                , (error) =>{
-                    this.last_error = error;
-                })
+export class HttpFetch {
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    async getGameState() {
+        try {
+            const response = await fetch(`${this.baseUrl}/api/data`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'  // Simplificado
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        , (error) =>{
-            this.last_error = error;
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error en HTTP:', error);
+            throw error;
         }
-    )}
+    }
+
+    async updateCardPosition(cardId, containerId, position) {
+        try {
+            const response = await fetch(`${this.baseUrl}/api/cards/${cardId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify({ containerId, position })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating card position:', error);
+            return null;
+        }
+    }
 }

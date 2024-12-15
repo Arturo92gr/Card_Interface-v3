@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,26 @@
   <title>Arrastrar y Soltar</title>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
-<body>
-<div class="palos">
-  <div class="contenedor" data-palo="diamantes">♦</div>
-  <div class="contenedor" data-palo="picas">♠</div>
-  <div class="contenedor" data-palo="corazones">♥</div>
-  <div class="contenedor" data-palo="treboles">♣</div>
-</div>
 
-<div class="baraja"></div>
+<body>
+  <h1>Cliente HTTP y Socket.IO</h1>
+
+  <div id="connection-controls">
+    <button id="fetchBtn">Conectar vía HTTP</button>
+    <button id="socketBtn">Conectar vía Socket.IO</button>
+    <div id="connection-status"></div>
+  </div>
+
+  <div class="palos">
+    <div class="contenedor" data-palo="diamantes">♦</div>
+    <div class="contenedor" data-palo="picas">♠</div>
+    <div class="contenedor" data-palo="corazones">♥</div>
+    <div class="contenedor" data-palo="treboles">♣</div>
+  </div>
+
+  <div class="baraja"></div>
 
   <script type="module" src="./js/index.js"></script>
 </body>
+
 </html>

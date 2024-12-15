@@ -13,11 +13,13 @@ export class GameStateService {
     static stateUpdateCallbacks = new Set();
 
     /**
-     * Inicializa la conexión Socket.IO y configura los eventos
-     * @returns {void}
+     * Inicializa la conexión con el servidor
+     * @param {Object} connection - Instancia de la conexión (Socket.IO o HttpFetch)
+     * @param {string} type - Tipo de conexión ('socket' o 'fetch')
      */
-    static init(socketConnection) {
-        this.socketConnection = socketConnection;
+    static init(connection, type) {
+        this.connection = connection;
+        this.connectionType = type;
     }
 
     /**
@@ -38,39 +40,23 @@ export class GameStateService {
     }
 
     /**
-     * Obtiene el estado actual del juego desde el servidor
-     * @returns {Promise<Object|null>} Estado del juego o null si hay error
-     */
-    static async getState() {
-        try {
-            const response = await fetch(`${this.API_URL}/state`, {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'omit'
-            });
-
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return response.json();
-        } catch (error) {
-            console.error('Error fetching state:', error);
-            return null;
-        }
-    }
-
-    /**
      * Actualiza la posición de una carta en el servidor
      * @param {string} cardId - ID de la carta
      * @param {string} containerId - ID del contenedor
      * @param {Object} position - Nueva posición {left, top}
      * @returns {Promise<Object|null>} Respuesta del servidor o null si hay error
      */
-    static updateCardPosition(cardId, containerId, position) {
-        if (this.socketConnection) {
-            this.socketConnection.updateCardPosition(cardId, containerId, position);
+    static async updateCardPosition(cardId, containerId, position) {
+        if (!this.connection) return;
+
+        try {
+            if (this.connectionType === 'socket') {
+                this.connection.updateCardPosition(cardId, containerId, position);
+            } else {
+                await this.connection.updateCardPosition(cardId, containerId, position);
+            }
+        } catch (error) {
+            console.error('Error updating card position:', error);
         }
     }
 }
