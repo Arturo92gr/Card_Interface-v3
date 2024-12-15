@@ -1,33 +1,25 @@
 import { Card } from '../models/Card.js';
 import { GameStateService } from '../services/GameStateService.js';
 
-/**
- * Controlador que maneja toda la lógica de arrastrar y soltar cartas
- * Gestiona la interacción entre la baraja y los contenedores de palos
- * Mantiene la sincronización del estado mediante Socket.IO
- */
+// Controlador de arrastre y colocación de cartas
 export class DragController {
     /**
      * Constructor: inicializa el controlador
      */
+    // Inicializa eventos de arrastre
     constructor() {
         this.init();
         // Suscribirse a actualizaciones de estado
         GameStateService.onStateUpdate(this.handleStateUpdate.bind(this));
     }
 
-    /**
-     * Inicializa los eventos de arrastre en contenedores y cartas
-     */
+    // Inicializa los eventos de arrastre en contenedores y cartas
     init() {
         this.initContainers();
         this.initCards();
     }
 
-    /**
-     * Configura los contenedores para recibir cartas
-     * Incluye tanto la baraja como los contenedores de palos
-     */
+    // Configura contenedores para recibir cartas
     initContainers() {
         document.querySelectorAll(".contenedor, .baraja").forEach(container => {
             container.addEventListener("dragover", this.handleDragOver.bind(this));
@@ -35,10 +27,7 @@ export class DragController {
         });
     }
 
-    /**
-     * Configura las cartas para que sean arrastrables
-     * Solo permite arrastrar la carta superior de la baraja
-     */
+    // Configura cartas para ser arrastrables
     initCards() {
         document.querySelectorAll(".card").forEach(card => {
             card.setAttribute("draggable", "true");
@@ -47,11 +36,7 @@ export class DragController {
         });
     }
 
-    /**
-     * Maneja el inicio del arrastre de una carta
-     * Verifica si la carta puede ser arrastrada (carta superior en la baraja)
-     * @param {DragEvent} event - Evento de inicio de arrastre
-     */
+    // Maneja inicio de arrastre
     handleDragStart(event) {
         const barajaContainer = event.target.closest('.baraja');
         if (barajaContainer) {
@@ -68,11 +53,7 @@ export class DragController {
         }));
     }
 
-    /**
-     * Maneja el evento de arrastre sobre un contenedor
-     * Verifica si la carta puede ser soltada en el contenedor
-     * @param {DragEvent} event - Evento de arrastre
-     */
+    // Valida si la carta puede soltarse
     handleDragOver(event) {
         const draggedElement = document.querySelector('.dragging');
         if (!draggedElement) return;
@@ -87,11 +68,7 @@ export class DragController {
         }
     }
 
-    /**
-     * Maneja la suelta de una carta en un contenedor
-     * Actualiza la posición de la carta y sincroniza con el servidor
-     * @param {DragEvent} event - Evento de suelta
-     */
+    // Procesa suelta de carta
     async handleDrop(event) {
         const data = JSON.parse(event.dataTransfer.getData("text"));
         const draggedElement = document.getElementById(data.id);
@@ -112,22 +89,12 @@ export class DragController {
         }
     }
 
-    /**
-     * Maneja el fin del arrastre de una carta
-     * Limpia los estados visuales del arrastre
-     * @param {DragEvent} event - Evento de fin de arrastre
-     */
+    // Maneja el fin del arrastre de una carta
     handleDragEnd(event) {
         event.target.classList.remove('dragging');
     }
 
-    /**
-     * Calcula la posición donde se debe colocar la carta en el contenedor
-     * @param {DragEvent} event - Evento de suelta
-     * @param {HTMLElement} container - Contenedor destino
-     * @param {HTMLElement} element - Carta que se está soltando
-     * @returns {Object} Posición {left, top} en pixeles
-     */
+    // Calcula la posición donde se debe colocar la carta en el contenedor
     calculateDropPosition(event, container, element) {
         const rect = container.getBoundingClientRect();
         return {
@@ -136,12 +103,7 @@ export class DragController {
         };
     }
 
-    /**
-     * Actualiza la posición visual de una carta en el contenedor
-     * @param {HTMLElement} card - Carta a posicionar
-     * @param {HTMLElement} container - Contenedor donde se coloca
-     * @param {Object} position - Posición {left, top}
-     */
+    // Actualiza la posición visual de una carta en el contenedor
     updateCardPosition(card, container, position) {
         card.style.position = "absolute";
         card.style.left = position.left;
@@ -151,11 +113,7 @@ export class DragController {
         }
     }
 
-    /**
-     * Aplica el estado del juego cargado desde el servidor
-     * Restaura la posición de todas las cartas
-     * @param {Object} state - Estado del juego
-     */
+    // Aplica estado recibido del servidor
     async applyState(state) {
         if (state && state.cards) {
             Object.entries(state.cards).forEach(([cardId, cardState]) => {
@@ -173,11 +131,7 @@ export class DragController {
         }
     }
 
-    /**
-     * Procesa las actualizaciones de estado recibidas del servidor
-     * Actualiza la interfaz de usuario según los cambios recibidos
-     * @param {Object} state - Estado actualizado recibido del servidor
-     */
+    // Procesa las actualizaciones de estado recibidas del servidor
     handleStateUpdate(state) {
         if (state && state.cards) {
             Object.entries(state.cards).forEach(([cardId, cardState]) => {

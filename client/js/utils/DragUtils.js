@@ -1,4 +1,6 @@
+// Utilidades para el arrastre de cartas
 export const DragUtils = {
+    // Calcula posición de suelta
     calculateDropPosition(event, container, element) {
         const rect = container.getBoundingClientRect();
         return {
@@ -7,6 +9,7 @@ export const DragUtils = {
         };
     },
 
+    // Valida si la suelta es permitida
     isValidDrop(cardPalo, containerPalo, isBaraja) {
         return containerPalo === cardPalo || isBaraja;
     }

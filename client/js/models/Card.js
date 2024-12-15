@@ -1,12 +1,9 @@
+// Clase que representa una carta de la baraja española
 export class Card {
-    /** Array con los palos disponibles en la baraja española */
+    // Palos disponibles en la baraja
     static palos = ['diamantes', 'corazones', 'picas', 'treboles'];
     
-    /**
-     * Constructor de la carta
-     * @param {number} numero - Número de la carta (1-12)
-     * @param {string} palo - Palo de la carta (diamantes, corazones, picas, treboles)
-     */
+    // Crea una nueva carta con número y palo
     constructor(numero, palo) {
         // Crear el elemento div que representará la carta
         this.element = document.createElement('div');
@@ -32,6 +29,7 @@ export class Card {
         `;
     }
 
+    // Crea toda la baraja de 48 cartas
     static createDeck() {
         let deck = [];
         // Para cada palo, crear cartas del 1 al 12
@@ -43,6 +41,7 @@ export class Card {
         return deck;
     }
 
+    // Mezcla aleatoriamente el mazo usando Fisher-Yates
     static shuffleDeck(deck) {
         let currentIndex = deck.length, randomIndex;
         // Algoritmo Fisher-Yates para mezclar
@@ -54,6 +53,7 @@ export class Card {
         return deck;
     }
 
+    // Distribuye las cartas en el contenedor visual
     static dealCards(container) {
         const deck = this.shuffleDeck(this.createDeck());
         let offset = 0;
@@ -71,6 +71,7 @@ export class Card {
         return deck;
     }
 
+    // Obtiene la carta superior del contenedor
     static getTopCard(container) {
         const cards = Array.from(container.querySelectorAll('.card'));
         if (cards.length === 0) return null;

@@ -1,8 +1,11 @@
+// Cliente HTTP para comunicación con servidor
 export class HttpFetch {
+    // Inicializa con URL base
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
     }
 
+    // Obtiene estado del juego
     async getGameState() {
         try {
             const response = await fetch(`${this.baseUrl}/api/data`, {
@@ -25,6 +28,7 @@ export class HttpFetch {
         }
     }
 
+    // Actualiza posición de carta
     async updateCardPosition(cardId, containerId, position) {
         try {
             const response = await fetch(`${this.baseUrl}/api/cards/${cardId}`, {

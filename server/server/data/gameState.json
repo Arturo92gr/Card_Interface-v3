@@ -1,0 +1,47 @@
+{
+  "cards": {
+    "card-corazones-2": {
+      "containerId": "corazones",
+      "position": {
+        "left": "60.515625px",
+        "top": "58.125px"
+      }
+    },
+    "card-picas-8": {
+      "containerId": "picas",
+      "position": {
+        "left": "77.03125px",
+        "top": "57.125px"
+      }
+    },
+    "card-picas-4": {
+      "containerId": "picas",
+      "position": {
+        "left": "70.03125px",
+        "top": "62.125px"
+      }
+    },
+    "card-diamantes-10": {
+      "containerId": "diamantes",
+      "position": {
+        "left": "118.546875px",
+        "top": "80.125px"
+      }
+    },
+    "card-treboles-3": {
+      "containerId": "treboles",
+      "position": {
+        "left": "49px",
+        "top": "71.125px"
+      }
+    },
+    "card-diamantes-2": {
+      "containerId": "diamantes",
+      "position": {
+        "left": "179.546875px",
+        "top": "67.125px"
+      }
+    }
+  },
+  "lastUpdate": "2024-12-15T16:54:45.678Z"
+}

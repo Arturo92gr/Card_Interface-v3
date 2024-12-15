@@ -1,3 +1,4 @@
+// Servidor Express con Socket.IO para juego de cartas
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -26,17 +27,27 @@ const io = new Server(server, {
     }
 });
 
-// Estado del juego
+// Estado global: posiciones de cartas y timestamp
 let gameState = {
     cards: {},
     lastUpdate: new Date().toISOString()
 };
 
-// Rutas HTTP
-app.get('/api/data', (req, res) => {
+// GET: obtener estado actual del juego
+app.get('/api/state', (req, res) => {
     res.json({ status: 'success', data: gameState });
 });
 
+// POST: actualizar estado completo
+app.post('/api/state', (req, res) => {
+    gameState = {
+        ...req.body,
+        lastUpdate: new Date().toISOString()
+    };
+    res.json({ status: 'success', data: gameState });
+});
+
+// PUT: actualizar posición de una carta
 app.put('/api/cards/:cardId', (req, res) => {
     const { cardId } = req.params;
     const { containerId, position } = req.body;
@@ -44,13 +55,30 @@ app.put('/api/cards/:cardId', (req, res) => {
     gameState.cards[cardId] = { containerId, position };
     gameState.lastUpdate = new Date().toISOString();
     
+    // Notificar a todos los clientes
     io.emit('cardMoved', { cardId, containerId, position });
     res.json({ status: 'success', data: gameState.cards[cardId] });
 });
 
-// Configurar Socket.IO
+// POST: resetear estado del juego
+app.post('/api/reset', (req, res) => {
+    gameState = {
+        cards: {},
+        lastUpdate: new Date().toISOString()
+    };
+    
+    // Notificar a todos los clientes del reset
+    io.emit('gameReset', gameState);
+    
+    res.json({ status: 'success', message: 'Game state reset successfully' });
+});
+
+// Socket.IO: gestión de conexiones en tiempo real
 io.on('connection', (socket) => {
     console.log('Cliente conectado:', socket.id);
+
+    // Enviar estado inicial al nuevo cliente
+    socket.emit('initialState', gameState);
 
     socket.on('updateCardPosition', (data) => {
         const { cardId, containerId, position } = data;
@@ -59,7 +87,7 @@ io.on('connection', (socket) => {
         gameState.cards[cardId] = { containerId, position };
         gameState.lastUpdate = new Date().toISOString();
         
-        // Emitir a otros clientes
+        // Emitir solo a otros clientes
         socket.broadcast.emit('cardMoved', { cardId, containerId, position });
     });
 
